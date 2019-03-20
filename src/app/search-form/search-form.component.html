@@ -1,0 +1,15 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="country">Country</label>
+        <type-ahead id="country" class="form-control"
+                    placeholder="All countries..."
+                    [suggestions]="countrySuggestions" [multi]="true" formControlName="selectedCountries"></type-ahead>
+    </div>
+    <div class="form-group">
+            <label for="devices">Devices</label>
+            <type-ahead id="devices" class="form-control" 
+                        placeholder="All devices..."
+                        [suggestions]="deviceSuggestions" [multi]="true" formControlName="selectedDevices"></type-ahead>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
