@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserSearchResult } from '../model/user-search-result.model';
 import { SearchCriteria } from './../model/search-criteria.model';
 import { HttpClient } from '@angular/common/http';
@@ -25,6 +26,14 @@ export class DataService {
         const queryString = `testers?search=${JSON.stringify(query)}`;
         const url = `${this.url}/${queryString}`;
 
-        return this.httpClient.get<Array<UserSearchResult>>(url);
+        return this.httpClient.get<Array<UserSearchResult>>(url)
+            .pipe(
+                map(results => results.sort(
+                    (a, b) => (a.experience < b.experience) 
+                        ? 1 
+                        : ((b.experience < a.experience) ? -1 : 0)
+                    )
+                )
+            );
     }
 }
