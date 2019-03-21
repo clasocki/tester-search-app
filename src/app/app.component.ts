@@ -12,13 +12,18 @@ export class AppComponent {
     title = 'tester-search-app';
 
     searchResults: Array<UserSearchResult>;
+    searchError: string;
 
-    constructor(private dataService: DataService) {
-
-    }
+    constructor(private dataService: DataService) {}
 
     onSubmitSearchForm(searchCriteria: SearchCriteria) {
+        this.searchError = '';
         this.dataService.search(searchCriteria)
-          .subscribe(results => this.searchResults = results);
+          .subscribe(
+              results => this.searchResults = results,
+              error => {
+                  console.log('Could not load search results', error);
+                  this.searchError = 'Oops! Something didn\'t go well while fetching the search results'; 
+              });
     }
 }

@@ -2,33 +2,29 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from 'rxjs';
 import { UserSearchResult } from '../model/user-search-result.model';
 import { SearchCriteria } from './../model/search-criteria.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DataService {
+    private readonly url = 'http://localhost:5000';
+    constructor(private httpClient: HttpClient) {}
+
     getDevices(): Observable<Array<string>> {
-        return of(['iPhone', 'Samsung']);
+        const query = `${this.url}/devices`;
+
+        return this.httpClient.get<Array<string>>(query);
     }
 
     getCountries(): Observable<Array<string>> {
-        return of(['UK', 'US']);
+        const query = `${this.url}/countries`;
+
+        return this.httpClient.get<Array<string>>(query);
     }
 
     search(query: SearchCriteria): Observable<Array<UserSearchResult>> {
-        return of([
-            {
-                firstName: 'Mark',
-                lastName: 'Twain',
-                country: 'UK',
-                lastLogin: new Date(),
-                experience: 20
-            },
-            {
-                firstName: 'Thomas',
-                lastName: 'Edison',
-                country: 'UK',
-                lastLogin: new Date(),
-                experience: 15
-            }
-        ]);
+        const queryString = `testers?search=${JSON.stringify(query)}`;
+        const url = `${this.url}/${queryString}`;
+
+        return this.httpClient.get<Array<UserSearchResult>>(url);
     }
 }

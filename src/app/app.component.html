@@ -1,9 +1,12 @@
 <div class="container">
     <div class="p-5">
         <h1>Tester search</h1>
-        <search-form (submit)="onSubmitSearchForm($event)"></search-form>
+        <search-form (submitForm)="onSubmitSearchForm($event)"></search-form>
         <div class="mt-3">
             <search-results [users]="searchResults"></search-results>
+            <div class="alert alert-danger" role="alert" *ngIf="searchError">
+                {{searchError}}
+            </div>
         </div>
     </div>
 </div>

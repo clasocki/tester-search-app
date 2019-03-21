@@ -13,7 +13,7 @@ export class SearchFormComponent implements OnInit {
 
     searchForm: FormGroup;
 
-    @Output() submit: EventEmitter<SearchCriteria> = new EventEmitter();
+    @Output() submitForm: EventEmitter<SearchCriteria> = new EventEmitter();
 
     constructor(
         private formBuilder: FormBuilder,
@@ -25,7 +25,8 @@ export class SearchFormComponent implements OnInit {
     }
 
     private fetchFormData() {
-        this.dataService.getCountries().subscribe(data => this.countrySuggestions = data);
+        this.dataService.getCountries().subscribe(
+            data => this.countrySuggestions = data);
         this.dataService.getDevices().subscribe(data => this.deviceSuggestions = data);
     }
 
@@ -37,9 +38,10 @@ export class SearchFormComponent implements OnInit {
     }
 
     onSubmit() {
-        this.submit.emit({
-            countries: this.searchForm.value.selectedCountries,
-            devices: this.searchForm.value.selectedDevices
+
+        this.submitForm.emit({
+            countries: this.searchForm.value.selectedCountries || [],
+            devices: this.searchForm.value.selectedDevices || []
         });
     }
 }
