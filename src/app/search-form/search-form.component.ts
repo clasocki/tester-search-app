@@ -38,7 +38,6 @@ export class SearchFormComponent implements OnInit {
     }
 
     onSubmit() {
-
         this.submitForm.emit({
             countries: this.searchForm.value.selectedCountries || [],
             devices: this.searchForm.value.selectedDevices || []

@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app) #only for development purposes
 
 def dict_factory(cursor, row):
     def underscore_to_camelcase(value):
