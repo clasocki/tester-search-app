@@ -51,14 +51,19 @@ def search_testers():
     query_dict = json.loads(query)
     device_filter = ''
     filters = []
+    filter_params = []
 
     def get_string_field_list(values):
-        return ",".join([ f"'{x}'" for x in values])
+        return ','.join('?'*len(values))
 
     if 'countries' in query_dict and query_dict['countries']:
-        filters.append(f'tester_id in (select t.tester_id from testers t where country in ({get_string_field_list(query_dict["countries"])}))')
+        filters.append('tester_id in (select t.tester_id from testers t where country in (%s))')
+        filter_params.append(','.join('?'*len(query_dict["countries"])))
+
     if 'devices' in query_dict and query_dict['devices']:
-        filters.append(f'device_id in (select device_id from devices d where d.description in ({get_string_field_list(query_dict["devices"])}))')
+        filters.append('device_id in (select device_id from devices d where d.description in (%s))')
+        filter_params.append(','.join('?'*len(query_dict["devices"])))
+        
     tester_devices = f'(select * from tester_device where {" and ".join(filters)}) td' if filters else 'tester_device td'
     
     query = f'''select t.*, SUM(CASE WHEN b.bug_id IS NOT NULL THEN 1 ELSE 0 END) experience 
@@ -68,7 +73,8 @@ def search_testers():
 
     conn = connect_to_db()
     c = conn.cursor()
-    results = c.execute(query).fetchall()
+
+    results = c.execute(query % tuple(filter_params), query_dict["countries"] + query_dict["devices"]).fetchall()
 
     conn.close()
     
