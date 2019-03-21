@@ -12,6 +12,7 @@ export class SearchFormComponent implements OnInit {
     deviceSuggestions: Array<string>;
 
     searchForm: FormGroup;
+    connectionError: boolean;
 
     @Output() submitForm: EventEmitter<SearchCriteria> = new EventEmitter();
 
@@ -25,9 +26,20 @@ export class SearchFormComponent implements OnInit {
     }
 
     private fetchFormData() {
+        this.connectionError = false;
+
         this.dataService.getCountries().subscribe(
-            data => this.countrySuggestions = data);
-        this.dataService.getDevices().subscribe(data => this.deviceSuggestions = data);
+            data => this.countrySuggestions = data,
+            error => {
+                console.log('Could not fetch available countries', error);
+                this.connectionError = true;
+            });
+        this.dataService.getDevices().subscribe(
+            data => this.deviceSuggestions = data,
+            error => {
+                console.log('Could not fetch available devices', error);
+                this.connectionError = true;
+            });
     }
 
     private initializeForm() {
