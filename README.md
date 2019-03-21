@@ -5,9 +5,13 @@
 The REST API server code resides in the server folder which consists of the following components:
   - create_db.py -> An auxiliary script that was used to populate an sqlite database with the data stored in the csv files in the data folder. The database is persised in the testers.db file.
   - server.py -> Run `python server.py` to start a server at http://localhost:5000. Three REST endpoints are exposed:
-    - /testers?search=query to search for testers based on provided criteria, e.g. /testers?search={"countries": ["US"], devices: ["iPhone 4"]}
+    - /testers?search=query to search for testers based on provided criteria, e.g. /testers?search={"countries": ["US"], "devices": ["iPhone 4"]}
     - /countries to retrieve the list of all available countries
     - /devices to retrieve the list of all available devices
+
+Dependencies:
+  - pip install Flask
+  - pip install -U flask-cors (for development purposes only)
 
 ## Frontend
 
